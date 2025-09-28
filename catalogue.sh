@@ -7,7 +7,7 @@ G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
 
-LOG_FOLDER="/var/log/shell-Roboshop"
+LOG_FOLDER="/var/log/shell-roboshop"
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
 mkdir -p $LOG_FOLDER
 LOG_FILE="$LOG_FOLDER/$SCRIPT_NAME.log"
@@ -49,15 +49,17 @@ else
 fi
 
 mkdir /app &>>$LOG_FILE
+VALIDATE $? "creating app directory "
 
 curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip &>>$LOG_FILE
 
 cd /app &>>$LOG_FILE
 
-rm -rf /app/* /app &>>$LOG_FILE
+rm -rf /app/*  &>>$LOG_FILE
 unzip /tmp/catalogue.zip &>>$LOG_FILE
 
 cd /app &>>$LOG_FILE
+
 npm install &>>$LOG_FILE
 VALIDATE $? "installing dependencies "
 
