@@ -12,6 +12,7 @@ SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
 mkdir -p $LOG_FOLDER
 LOG_FILE="$LOG_FOLDER/$SCRIPT_NAME.log"
 DIR_PATH=$PWD
+MONGODB_HOST="mongodb.vinaymukkamalla.fun"
 
 echo " script started execution at : $(date)" | tee  >>$LOG_FILE
 
@@ -79,5 +80,5 @@ VALIDATE $? "Adding mongo repo"
 dnf install mongodb-mongosh -y &>>$LOG_FILE
 VALIDATE $? "installing mongosh "
 
-mongosh --host mongodb.vinaymukamalla.fun </app/db/master-data.js
+mongosh --host $MONGODB_HOST </app/db/master-data.js
 VALIDATE $? "connecting to mongodb server "
