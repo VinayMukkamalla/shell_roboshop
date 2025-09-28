@@ -14,7 +14,7 @@ LOG_FILE="$LOG_FOLDER/$SCRIPT_NAME.log"
 DIR_PATH=$PWD
 MONGODB_HOST="mongodb.vinaymukkamalla.fun"
 
-echo " script started execution at : $(date)" | tee  >>$LOG_FILE
+echo " script started execution at : $(date)" | tee -a $LOG_FILE
 
 if [ $user -gt 0 ]; then
     echo "ERROR:: you are not allowed to run this script use root privilege"
@@ -23,10 +23,10 @@ fi
 
 VALIDATE(){
     if [ $1 -gt 0 ]; then
-        echo -e " $2 ..$R Failure $N" | tee  >>$LOG_FILE
+        echo -e " $2 ..$R Failure $N" | tee -a $LOG_FILE
         exit 1
     else
-        echo -e " $2 ..$G Success $N" | tee  >>$LOG_FILE
+        echo -e " $2 ..$G Success $N" | tee -a $LOG_FILE
 
     fi
 
