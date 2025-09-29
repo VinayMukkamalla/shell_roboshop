@@ -46,7 +46,7 @@ if [ $? -ne 0 ]; then
     useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE
     VALIDATE $? "adding system user "
 else    
-    echo "user already exists"
+    echo -e "user already exists $Y ...Skipping $N"
 fi
 
 mkdir -p /app &>>$LOG_FILE
@@ -80,5 +80,13 @@ VALIDATE $? "Adding mongo repo"
 dnf install mongodb-mongosh -y &>>$LOG_FILE
 VALIDATE $? "installing mongosh "
 
-mongosh --host $MONGODB_HOST </app/db/master-data.js &>>$LOG_FILE
-VALIDATE $? "connecting to mongodb server "
+INDEX=$(mongosh mongodb.daws86s.fun --quiet --eval "db.getMongo().getDBNames().indexOf('catalogue')")
+if [ $INDEX -le 0 ]; then
+    mongosh --host $MONGODB_HOST </app/db/master-data.js &>>$LOG_FILE
+    VALIDATE $? "connecting to mongodb server "
+else        
+    echo "catalogue products already loaded ...$Y SKipping $N"
+fi
+
+systemctl restart catalogue
+VALIDATE $? "restarted catalogue service"
