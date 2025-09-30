@@ -32,19 +32,24 @@ VALIDATE(){
 
 }
 
-cp $DIR_PATH/rabbitmq.repo /etc/yum.repos.d/rabbitmq.repo
+cp $DIR_PATH/rabbitmq.repo /etc/yum.repos.d/rabbitmq.repo &>>$LOG_FILE
 
-dnf install rabbitmq-server -y
+dnf install rabbitmq-server -y &>>$LOG_FILE
 VALIDATE $? "Installing rabbitmq server"
 
-systemctl enable rabbitmq-server
+systemctl enable rabbitmq-server &>>$LOG_FILE
 VALIDATE $? "enabling rabbitmq server"
 
-systemctl start rabbitmq-server
+systemctl start rabbitmq-server &>>$LOG_FILE
 VALIDATE $? "starting rabbitmq server"
 
-rabbitmqctl add_user roboshop roboshop123
+rabbitmqctl add_user roboshop roboshop123 &>>$LOG_FILE
 VALIDATE $? "adding roboshop user"
 
-rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*"
+rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*" &>>$LOG_FILE
 VALIDATE $? "setting permissions for roboshop user"
+
+END_TIME=$(date +%s)
+TOTAL_TIME=$(($END_TIME-$START_TIME))
+
+echo "Total time taken to execute script : $TOTAL_TIME seconds"
