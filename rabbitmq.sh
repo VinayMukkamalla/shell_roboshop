@@ -46,7 +46,6 @@ VALIDATE $? "starting rabbitmq server"
 id roboshop  &>>$LOG_FILE
 if [ $? -ne 0 ]; then
     rabbitmqctl add_user roboshop roboshop123 &>>$LOG_FILE
-    VALIDATE $? "adding roboshop user"
 else    
     echo -e "user already exists $Y ...Skipping $N"
 fi
