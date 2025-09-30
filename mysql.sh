@@ -31,14 +31,19 @@ VALIDATE(){
 
 }
 
-dnf install mysql-server -y
+dnf install mysql-server -y &>>$LOG_FILE
 VALIDATE $? "Installing mysql server"
 
-systemctl enable mysqld
+systemctl enable mysqld &>>$LOG_FILE
 VALIDATE $? "enabling mysql server"
 
-systemctl start mysqld  
+systemctl start mysqld  &>>$LOG_FILE
 VALIDATE $? "starting mysql server"
 
-mysql_secure_installation --set-root-pass RoboShop@1
+mysql_secure_installation --set-root-pass RoboShop@1 &>>$LOG_FILE
 VALIDATE $? "setting root pass for mysql user"
+
+END_TIME=$(date +%s)
+TOTAL_TIME=$(($END_TIME-$START_TIME))
+
+echo "Total time taken to execute script : $TOTAL_TIME seconds"
