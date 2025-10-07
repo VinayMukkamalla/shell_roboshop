@@ -13,7 +13,7 @@ START_TIME=$(date +%s)
 mkdir -p $LOG_FOLDER
 LOG_FILE="$LOG_FOLDER/$SCRIPT_NAME.log"
 DIR_PATH=$(PWD)
-MONGODB_HOST="mongodb.vinaymukkamalla.fun"
+MYSQL_HOST="mysql.vinaymukkamalla.fun"
 
 echo " script started execution at : $(date)" | tee -a $LOG_FILE
 
@@ -33,7 +33,7 @@ VALIDATE(){
 
 }
 
-dnf install maven -y
+dnf install maven -y &>>$LOG_FILE
 VALIDATE $? "Installing maven"
 
 id roboshop  &>>$LOG_FILE
@@ -59,36 +59,43 @@ VALIDATE $? " removing existing code in app Directory "
 unzip /tmp/shipping.zip &>>$LOG_FILE
 VALIDATE $? "unzipping shipping application "
 
-mvn clean package 
+mvn clean package &>>$LOG_FILE
 VALIDATE $? "packaging application in target directory"
 
-mv target/shipping-1.0.jar shipping.jar 
+mv target/shipping-1.0.jar shipping.jar &>>$LOG_FILE
 VALIDATE $? " renaming jar application file"
 
-cp $DIR_PATH/shipping.service /systemd/system/shipping.service
+cp $DIR_PATH/shipping.service /systemd/system/shipping.service &>>$LOG_FILE
 VALIDATE $? " creating shipping.service"
 
-systemctl daemon-reload
+systemctl daemon-reload &>>$LOG_FILE
 
-systemctl enable shipping
+systemctl enable shipping &>>$LOG_FILE
 VALIDATE $? " enabling shipping service"
 
-systemctl start shipping
+systemctl start shipping &>>$LOG_FILE
 VALIDATE $? " starting shipping service"
 
-dnf install mysql -y 
+dnf install mysql -y &>>$LOG_FILE
 VALIDATE $? " installing shipping service"
 
-mysql -h mysql.vinaymukkamalla.fun -uroot -pRoboShop@1 < /app/db/schema.sql
-VALIDATE $? " loading schema.sql"
+mysql -h $MYSQL_HOST -uroot -pRoboShop@1 -e 'use cities' &>>$LOG_FILE
 
-mysql -h mysql.vinaymukkamalla.fun -uroot -pRoboShop@1 < /app/db/app-user.sql 
-VALIDATE $? " loading app-user.sql"
+if [ $? -ne 0 ]; then
+    mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/schema.sql &>>$LOG_FILE
+    VALIDATE $? " loading schema.sql"
 
-mysql -h mysql.vinaymukkamalla.fun -uroot -pRoboShop@1 < /app/db/master-data.sql
-VALIDATE $? " loading master-data.sql"
+    mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/app-user.sql &>>$LOG_FILE
+    VALIDATE $? " loading app-user.sql"
 
-systemctl restart shipping
+    mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/master-data.sql &>>$LOG_FILE
+    VALIDATE $? " loading master-data.sql"
+else
+    echo "databse already loaded $Y...SKIPPING $N"
+
+fi
+
+systemctl restart shipping &>>$LOG_FILE
 VALIDATE $? " restarting shipping service"
 
 END_TIME=$(date +%s)
