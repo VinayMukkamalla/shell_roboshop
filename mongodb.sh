@@ -9,7 +9,7 @@ N="\e[0m"
 
 LOG_FOLDER="/var/log/shell-Roboshop"
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
-DIR_PATH=$(pwd)
+DIR_PATH=$PWD
 mkdir -p $LOG_FOLDER
 LOG_FILE="$LOG_FOLDER/$SCRIPT_NAME.log"
 
