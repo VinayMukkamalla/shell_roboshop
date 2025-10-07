@@ -12,7 +12,7 @@ SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
 START_TIME=$(date +%s)
 mkdir -p $LOG_FOLDER
 LOG_FILE="$LOG_FOLDER/$SCRIPT_NAME.log"
-DIR_PATH=$(PWD)
+DIR_PATH=$PWD
 MYSQL_HOST="mysql.vinaymukkamalla.fun"
 
 echo " script started execution at : $(date)" | tee -a $LOG_FILE
