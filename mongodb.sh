@@ -9,6 +9,7 @@ N="\e[0m"
 
 LOG_FOLDER="/var/log/shell-Roboshop"
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
+START_TIME=$(date +%s)
 DIR_PATH=$PWD
 mkdir -p $LOG_FOLDER
 LOG_FILE="$LOG_FOLDER/$SCRIPT_NAME.log"
@@ -48,3 +49,8 @@ VALIDATE $? "Allowing access to mongodb"
 
 systemctl restart mongod &>>$LOG_FILE
 VALIDATE $? "restarting mongodb server"
+
+END_TIME=$(date +%s)
+TOTAL_TIME=$(($END_TIME-$START_TIME))
+
+echo "Total time taken to execute script : $TOTAL_TIME seconds"
