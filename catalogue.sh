@@ -82,11 +82,11 @@ dnf install mongodb-mongosh -y &>>$LOG_FILE
 VALIDATE $? "installing mongosh "
 
 INDEX=$(mongosh mongodb.daws86s.fun --quiet --eval "db.getMongo().getDBNames().indexOf('catalogue')")
-if [ $INDEX -le 0 ]; then
+if [ $INDEX -lt 0 ]; then
     mongosh --host $MONGODB_HOST </app/db/master-data.js &>>$LOG_FILE
     VALIDATE $? "connecting to mongodb server "
 else        
-    echo "catalogue products already loaded ...$Y SKipping $N"
+    echo -e "catalogue products already loaded ...$Y SKipping $N"
 fi
 
 systemctl restart catalogue
