@@ -61,7 +61,7 @@ VALIDATE $? "unzipping payment application "
 pip3 install -r requirements.txt &>>$LOG_FILE
 VALIDATE $? "installing application dependencies"
 
-cp $DIR_PATH/payment.service /systemd/system/payment.service &>>$LOG_FILE
+cp $DIR_PATH/payment.service etc/systemd/system/payment.service &>>$LOG_FILE
 VALIDATE $? " creating payment service"
 
 systemctl daemon-reload &>>$LOG_FILE
