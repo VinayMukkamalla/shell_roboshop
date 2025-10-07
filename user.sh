@@ -54,11 +54,16 @@ mkdir -p /app &>>$LOG_FILE
 VALIDATE $? "creating app directory "
 
 curl -o /tmp/user.zip https://roboshop-artifacts.s3.amazonaws.com/user-v3.zip &>>$LOG_FILE
+VALIDATE $? "Downloading user application "
 
 cd /app &>>$LOG_FILE
+VALIDATE $? "changing to app Directory "
 
 rm -rf /app/*  &>>$LOG_FILE
+VALIDATE $? " removing existing code in app Directory "
+
 unzip /tmp/user.zip &>>$LOG_FILE
+VALIDATE $? "unzipping user application "
 
 
 npm install &>>$LOG_FILE

@@ -54,12 +54,16 @@ mkdir -p /app &>>$LOG_FILE
 VALIDATE $? "creating app directory "
 
 curl -o /tmp/cart.zip https://roboshop-artifacts.s3.amazonaws.com/cart-v3.zip &>>$LOG_FILE
+VALIDATE $? "Downloading cart application "
 
 cd /app &>>$LOG_FILE
+VALIDATE $? "changing to app Directory "
 
 rm -rf /app/*  &>>$LOG_FILE
-unzip /tmp/cart.zip &>>$LOG_FILE
+VALIDATE $? " removing existing code in app Directory "
 
+unzip /tmp/cart.zip &>>$LOG_FILE
+VALIDATE $? "unzipping cart application "
 
 npm install &>>$LOG_FILE
 VALIDATE $? "installing dependencies "
