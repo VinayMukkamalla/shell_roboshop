@@ -65,7 +65,7 @@ VALIDATE $? "packaging application in target directory"
 mv target/shipping-1.0.jar shipping.jar &>>$LOG_FILE
 VALIDATE $? " renaming jar application file"
 
-cp $DIR_PATH/shipping.service /systemd/system/shipping.service &>>$LOG_FILE
+cp $DIR_PATH/shipping.service /etc/systemd/system/shipping.service &>>$LOG_FILE
 VALIDATE $? " creating shipping.service"
 
 systemctl daemon-reload &>>$LOG_FILE
