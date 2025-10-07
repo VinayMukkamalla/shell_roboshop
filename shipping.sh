@@ -59,6 +59,38 @@ VALIDATE $? " removing existing code in app Directory "
 unzip /tmp/shipping.zip &>>$LOG_FILE
 VALIDATE $? "unzipping shipping application "
 
+mvn clean package 
+VALIDATE $? "packaging application in target directory"
+
+mv target/shipping-1.0.jar shipping.jar 
+VALIDATE $? " renaming jar application file"
+
+cp $DIR_PATH/shipping.service /systemd/system/shipping.service
+VALIDATE $? " creating shipping.service"
+
+systemctl daemon-reload
+
+systemctl enable shipping
+VALIDATE $? " enabling shipping service"
+
+systemctl start shipping
+VALIDATE $? " starting shipping service"
+
+dnf install mysql -y 
+VALIDATE $? " installing shipping service"
+
+mysql -h mysql.vinaymukkamalla.fun -uroot -pRoboShop@1 < /app/db/schema.sql
+VALIDATE $? " loading schema.sql"
+
+mysql -h mysql.vinaymukkamalla.fun -uroot -pRoboShop@1 < /app/db/app-user.sql 
+VALIDATE $? " loading app-user.sql"
+
+mysql -h mysql.vinaymukkamalla.fun -uroot -pRoboShop@1 < /app/db/master-data.sql
+VALIDATE $? " loading master-data.sql"
+
+systemctl restart shipping
+VALIDATE $? " restarting shipping service"
+
 END_TIME=$(date +%s)
 TOTAL_TIME=$(($END_TIME-$START_TIME))
 
