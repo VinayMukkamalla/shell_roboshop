@@ -58,7 +58,7 @@ VALIDATE $? " removing existing code in app Directory "
 unzip /tmp/payment.zip &>>$LOG_FILE
 VALIDATE $? "unzipping payment application "
 
-pip3 install -r requirements.txt
+pip3 install -r requirements.txt &>>$LOG_FILE
 VALIDATE $? "installing application dependencies"
 
 cp $DIR_PATH/payment.service /systemd/system/payment.service &>>$LOG_FILE
