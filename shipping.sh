@@ -77,7 +77,7 @@ systemctl start shipping &>>$LOG_FILE
 VALIDATE $? " starting shipping service"
 
 dnf install mysql -y &>>$LOG_FILE
-VALIDATE $? " installing shipping service"
+VALIDATE $? " installing mysql"
 
 mysql -h $MYSQL_HOST -uroot -pRoboShop@1 -e 'use cities' &>>$LOG_FILE
 
