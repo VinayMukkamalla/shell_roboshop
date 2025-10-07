@@ -9,7 +9,7 @@ N="\e[0m"
 
 LOG_FOLDER="/var/log/shell-roboshop"
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
-START_TIME_TIME=$(date +%s)
+START_TIME=$(date +%s)
 mkdir -p $LOG_FOLDER
 LOG_FILE="$LOG_FOLDER/$SCRIPT_NAME.log"
 DIR_PATH=$PWD
@@ -93,6 +93,7 @@ systemctl restart catalogue
 VALIDATE $? "restarted catalogue service"
 
 END_TIME=$(date +%s)
+
 TOTAL_TIME=$(($END_TIME-$START_TIME))
 
 echo "Total time taken to execute script : $TOTAL_TIME seconds"
